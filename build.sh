@@ -3,7 +3,7 @@
 set -e
 
 BUILD_DIR='build'
-VER='3.4.0'
+VER='3.4.1'
 NAME="libarchive-$VER"
 
 mkdir -p "$BUILD_DIR"
