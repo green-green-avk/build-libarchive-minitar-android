@@ -24,7 +24,7 @@
  *
  */
 #ifndef ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
-#define	ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
+#define ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
 
 #include <android/api-level.h>
 #ifdef __ANDROID_API__
@@ -126,6 +126,7 @@
 #define HAVE_SIGNAL_H 1
 #define HAVE_STATFS 1
 #define HAVE_STDARG_H 1
+#define HAVE_STDBOOL_H 1
 #define HAVE_STDINT_H 1
 #define HAVE_STDLIB_H 1
 #define HAVE_STRCHR 1
@@ -178,11 +179,42 @@
 #define HAVE_WMEMCPY 1
 #define HAVE_ARC4RANDOM_BUF 1
 #define HAVE_ZLIB_H 1
-#define HAVE_BZLIB_H 1
-#define HAVE_LZMA_H 1
 #define LSTAT_FOLLOWS_SLASHED_SYMLINK 1
 #define SIZEOF_WCHAR_T 4
 #define STDC_HEADERS 1
 #define STRERROR_R_CHAR_P 1
 #define TIME_WITH_SYS_TIME 1
+
+#define HAVE_SMALL
+
+/* Define to 1 if any of HAVE_DECODER_foo have been defined. */
+#define HAVE_DECODERS
+
+/* Define to 1 if arm decoder is enabled. */
+#define HAVE_DECODER_ARM
+
+/* Define to 1 if armthumb decoder is enabled. */
+#define HAVE_DECODER_ARMTHUMB
+
+/* Define to 1 if delta decoder is enabled. */
+#define HAVE_DECODER_DELTA
+
+/* Define to 1 if ia64 decoder is enabled. */
+#define HAVE_DECODER_IA64
+
+/* Define to 1 if lzma1 decoder is enabled. */
+#define HAVE_DECODER_LZMA1
+
+/* Define to 1 if lzma2 decoder is enabled. */
+#define HAVE_DECODER_LZMA2
+
+/* Define to 1 if powerpc decoder is enabled. */
+#define HAVE_DECODER_POWERPC
+
+/* Define to 1 if sparc decoder is enabled. */
+#define HAVE_DECODER_SPARC
+
+/* Define to 1 if x86 decoder is enabled. */
+#define HAVE_DECODER_X86
+
 #endif

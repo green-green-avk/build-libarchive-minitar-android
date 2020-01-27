@@ -1,4 +1,7 @@
 /*
+ *   NO_XZ - Implies NO_XZ_CREATE and NO_XZ_EXTRACT
+ *   NO_XZ_CREATE - Suppress xz compression support.
+ *   NO_XZ_EXTRACT - Suppress xz auto-detection and decompression.
  *   NO_BZIP2 - Implies NO_BZIP2_CREATE and NO_BZIP2_EXTRACT
  *   NO_BZIP2_CREATE - Suppress bzip2 compression support.
  *   NO_BZIP2_EXTRACT - Suppress bzip2 auto-detection and decompression.
@@ -14,7 +17,6 @@
  *   NO_TAR_EXTRACT - Suppress tar extraction
  */
 
-#define NO_BZIP2
 #define NO_COMPRESS
 #define NO_CREATE
 #define NO_CPIO_EXTRACT

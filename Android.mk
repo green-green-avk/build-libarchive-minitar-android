@@ -23,6 +23,7 @@
 # directories
 LOCAL_PATH := $(TARGET_SRC_DIR)
 
+
 libarchive_target_config := $(realpath $(call my-dir))/android-min.h
 
 libarchive_src_files := libarchive/archive_acl.c \
@@ -150,10 +151,24 @@ libarchive_fe_src_files :=  libarchive_fe/err.c \
 							libarchive_fe/passphrase.c
 
 
-minitar_src_files := examples/minitar/minitar.c
+minitar_src_files := ../../minitar/minitar.c
 
 
 minitar_config := $(call my-dir)/minitar-config.h
+
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libbz2
+LOCAL_SRC_FILES := $(realpath $(TARGET_SRC_DIR)/../../bzip2/build/obj/local/$(TARGET_ARCH_ABI)/libbz2.a)
+LOCAL_EXPORT_C_INCLUDES := $(realpath $(TARGET_SRC_DIR)/../../bzip2/build/include)
+include $(PREBUILT_STATIC_LIBRARY)
+
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := liblzma
+LOCAL_SRC_FILES := $(realpath $(TARGET_SRC_DIR)/../../lzma/build/obj/local/$(TARGET_ARCH_ABI)/liblzma.a)
+LOCAL_EXPORT_C_INCLUDES := $(realpath $(TARGET_SRC_DIR)/../../lzma/build/include)
+include $(PREBUILT_STATIC_LIBRARY)
 
 
 include $(CLEAR_VARS)
@@ -163,6 +178,7 @@ LOCAL_SRC_FILES := $(libarchive_src_files)
 LOCAL_CFLAGS := -DPLATFORM_CONFIG_H=\"$(libarchive_target_config)\"
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/contrib/android/include
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/libarchive
+LOCAL_STATIC_LIBRARIES := libbz2 liblzma
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -180,7 +196,7 @@ LOCAL_MODULE := minitar
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS :=  -DBSDTAR_VERSION_STRING=ARCHIVE_VERSION_ONLY_STRING -DPLATFORM_CONFIG_H=\"$(libarchive_target_config)\" -include $(minitar_config)
 LOCAL_LDLIBS := -lz
-LOCAL_STATIC_LIBRARIES := libarchive libarchive_fe
+LOCAL_STATIC_LIBRARIES := libarchive libarchive_fe libbz2 liblzma
 LOCAL_SRC_FILES := $(minitar_src_files)
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/libarchive $(LOCAL_PATH)/libarchive_fe $(LOCAL_PATH)/contrib/android/include
 include $(BUILD_EXECUTABLE)
