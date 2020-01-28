@@ -1,5 +1,6 @@
 # build-libarchive-minitar-android
-A very small command line .tar.gz unarchiver utility for Android.
+
+A very small (~200kb) command line tar/gz/bzip2/xz unarchiver utility for Android.
 
 Just because old Android versions have no tar/gunzip accessible for applications.
 
