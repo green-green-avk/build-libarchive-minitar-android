@@ -24,7 +24,7 @@
  *
  */
 #ifndef ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
-#define	ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
+#define ARCHIVE_PLATFORM_H_ANDROID_INCLUDED
 
 #include <android/api-level.h>
 #ifdef __ANDROID_API__
@@ -185,4 +185,7 @@
 #define STDC_HEADERS 1
 #define STRERROR_R_CHAR_P 1
 #define TIME_WITH_SYS_TIME 1
+
+#define IS_ANDROID_NOROOT
+
 #endif

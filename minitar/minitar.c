@@ -294,6 +294,7 @@ create(const char *filename, int compress, const char **argv)
 
 		r = archive_read_disk_open(disk, *argv);
 		if (r != ARCHIVE_OK) {
+			errmsg("archive_read_disk_open(): ");
 			errmsg(archive_error_string(disk));
 			errmsg("\n");
 			exit(1);
@@ -420,7 +421,15 @@ extract(const char *filename, int do_extract, int flags)
 		if (do_extract) {
 			r = archive_write_header(ext, entry);
 			if (r != ARCHIVE_OK) {
-				errmsg(archive_error_string(a));
+				char ens[16];
+				errmsg(": ");
+				sprintf(ens, "%d", r);
+				errmsg(ens);
+				errmsg(": ");
+				sprintf(ens, "%d", archive_errno(ext));
+				errmsg(ens);
+				errmsg(": ");
+				errmsg(archive_error_string(ext));
 				needcr = 1;
 			}
 			else {

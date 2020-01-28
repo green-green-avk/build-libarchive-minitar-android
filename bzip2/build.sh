@@ -12,7 +12,7 @@ cd "$BUILD_DIR"
 wget -O - "https://sourceware.org/pub/bzip2/$NAME.tar.gz" | tar -xz
 )
 
-export TARGET_SRC_DIR=$(realpath -s "$BUILD_DIR/$NAME")
+export TARGET_SRC_DIR="$(realpath -s "$BUILD_DIR/$NAME")"
 
 export NDK_PROJECT_PATH="$BUILD_DIR"
 ndk-build NDK_APPLICATION_MK=./App-all.mk

@@ -15,7 +15,9 @@ cd "$BUILD_DIR"
 wget -O - "https://www.libarchive.org/downloads/$NAME.tar.gz" | tar -xz
 )
 
-export TARGET_SRC_DIR=$(realpath -s "$BUILD_DIR/$NAME")
+export TARGET_SRC_DIR="$(realpath -s "$BUILD_DIR/$NAME")"
+
+patch -i "$(realpath -s android.patch)" -p0 -d "$TARGET_SRC_DIR"
 
 export NDK_PROJECT_PATH="$BUILD_DIR"
 ndk-build NDK_APPLICATION_MK=./App-all.mk
