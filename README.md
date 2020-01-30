@@ -4,6 +4,10 @@ A very small (~200kb) command line tar/gz/bzip2/xz unarchiver utility for Androi
 
 Just because old Android versions have no even tar/gunzip accessible for applications.
 
+If you want just to use:
+* Download [prebuilt binaries](https://github.com/green-green-avk/build-libarchive-minitar-android/tree/master/prebuilt).
+
+If you want to build:
 * The only prerequisite is the Android-NDK.
-* Just use the prebuilt binaries or run the `./build.sh` script.
+* Just run the `./build.sh` script.
 * Usage example: `cat something.tgz | minitar`.
