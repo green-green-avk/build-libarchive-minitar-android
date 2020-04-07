@@ -10,4 +10,5 @@ If you want just to use:
 If you want to build:
 * The only prerequisite is the Android-NDK.
 * Just run the `./build.sh` script.
-* Usage example: `cat something.tgz | minitar`.
+
+Usage example: `cat something.tgz | minitar`.
