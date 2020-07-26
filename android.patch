@@ -1,5 +1,5 @@
---- libarchive/archive_write_disk_posix.c	2019-12-29 17:39:54.000000000 -0800
-+++ libarchive/archive_write_disk_posix.c	2020-01-27 17:16:17.978059447 -0800
+--- libarchive/archive_write_disk_posix.c
++++ libarchive/archive_write_disk_posix.c
 @@ -2144,8 +2144,8 @@
  	if (en) {
  		/* Everything failed; give up here. */
@@ -7,22 +7,18 @@
 -			archive_set_error(&a->archive, en, "Can't create '%s'",
 -			    a->name);
 +			archive_set_error(&a->archive, en, "Can't create '%s', errno = %d",
-+			    a->name, en);
++				a->name, en);
  		return (ARCHIVE_FAILED);
  	}
  
-@@ -2171,6 +2171,10 @@
- 	struct archive_string error_string;
- 	int error_number;
- 
-+	/* Nonrooted Android can't do hard links! */
-+	/* Just pretend they are symlinks. */
-+#ifndef IS_ANDROID_NOROOT
-+
- 	/* We identify hard/symlinks according to the link names. */
+@@ -2175,13 +2175,13 @@
  	/* Since link(2) and symlink(2) don't handle modes, we're done here. */
  	linkname = archive_entry_hardlink(a->entry);
-@@ -2181,7 +2185,7 @@
+ 	if (linkname != NULL) {
+-#if !HAVE_LINK
++#if !(HAVE_LINK || (defined(IS_ANDROID_NOROOT) && HAVE_SYMLINK))
+ 		return (EPERM);
+ #else
  		archive_string_init(&error_string);
  		linkname_copy = strdup(linkname);
  		if (linkname_copy == NULL) {
@@ -31,33 +27,52 @@
  		}
  		/*
  		 * TODO: consider using the cleaned-up path as the link
-@@ -2216,6 +2220,9 @@
+@@ -2215,7 +2215,34 @@
+ 		}
  		free(linkname_copy);
  		archive_string_free(&error_string);
++#ifndef IS_ANDROID_NOROOT
  		r = link(linkname, a->name) ? errno : 0;
 +		if (r != 0)
 +			archive_set_error(&a->archive, ARCHIVE_FAILED, "Can't create hard link '%s', errno = %d",
-+			    a->name, r);
++				a->name, r);
++#else /* IS_ANDROID_NOROOT */
++/*
++ * Nonrooted Android can't do hard links!
++ * Just pretend they are symlinks.
++ * Let's treat the archive root as a chroot root for now.
++ * TODO: Fix this temporary solution later.
++ */
++		if (linkname[0] != '/') {
++			if (linkname[0] == '.' && linkname[1] == '/') {
++				r = symlink(linkname + 1, a->name) ? errno : 0;
++			} else {
++				char _linkname[strlen(linkname) + 2];
++				_linkname[0] = '/';
++				strcpy(_linkname + 1, linkname);
++				r = symlink(_linkname, a->name) ? errno : 0;
++			}
++		} else {
++			r = symlink(linkname, a->name) ? errno : 0;
++		}
++		if (r != 0)
++			archive_set_error(&a->archive, ARCHIVE_FAILED, "Can't create a symlink substitution of the hardlink '%s', errno = %d",
++				a->name, r);
++#endif /* IS_ANDROID_NOROOT */
  		/*
  		 * New cpio and pax formats allow hardlink entries
  		 * to carry data, so we may have to open the file
-@@ -2251,9 +2258,18 @@
- #endif
- 	}
+@@ -2253,7 +2280,11 @@
  	linkname = archive_entry_symlink(a->entry);
-+#else
-+	linkname = archive_entry_symlink(a->entry);
-+	if (linkname == NULL)
-+		linkname = archive_entry_hardlink(a->entry);
-+#endif
  	if (linkname != NULL) {
  #if HAVE_SYMLINK
 -		return symlink(linkname, a->name) ? errno : 0;
 +		r = symlink(linkname, a->name) ? errno : 0;
 +		if (r != 0)
 +			archive_set_error(&a->archive, ARCHIVE_FAILED, "Can't create symlink '%s', errno = %d",
-+			    a->name, r);
++				a->name, r);
 +		return (r);
  #else
  		return (EPERM);
  #endif
+
