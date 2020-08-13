@@ -1,6 +1,6 @@
 --- libarchive/archive_write_disk_posix.c
 +++ libarchive/archive_write_disk_posix.c
-@@ -2144,8 +2144,8 @@
+@@ -2194,8 +2194,8 @@ restore_entry(struct archive_write_disk *a)
  	if (en) {
  		/* Everything failed; give up here. */
  		if ((&a->archive)->error == NULL)
@@ -11,7 +11,7 @@
  		return (ARCHIVE_FAILED);
  	}
  
-@@ -2175,13 +2175,13 @@
+@@ -2225,13 +2225,13 @@ create_filesystem_object(struct archive_write_disk *a)
  	/* Since link(2) and symlink(2) don't handle modes, we're done here. */
  	linkname = archive_entry_hardlink(a->entry);
  	if (linkname != NULL) {
@@ -27,10 +27,10 @@
  		}
  		/*
  		 * TODO: consider using the cleaned-up path as the link
-@@ -2215,7 +2215,34 @@
- 		}
- 		free(linkname_copy);
- 		archive_string_free(&error_string);
+@@ -2272,7 +2272,34 @@ create_filesystem_object(struct archive_write_disk *a)
+ 		 */
+ 		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
+ 			unlink(a->name);
 +#ifndef IS_ANDROID_NOROOT
  		r = link(linkname, a->name) ? errno : 0;
 +		if (r != 0)
@@ -62,10 +62,10 @@
  		/*
  		 * New cpio and pax formats allow hardlink entries
  		 * to carry data, so we may have to open the file
-@@ -2253,7 +2280,11 @@
- 	linkname = archive_entry_symlink(a->entry);
- 	if (linkname != NULL) {
- #if HAVE_SYMLINK
+@@ -2317,7 +2344,11 @@ create_filesystem_object(struct archive_write_disk *a)
+ 		 */
+ 		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
+ 			unlink(a->name);
 -		return symlink(linkname, a->name) ? errno : 0;
 +		r = symlink(linkname, a->name) ? errno : 0;
 +		if (r != 0)
@@ -75,4 +75,3 @@
  #else
  		return (EPERM);
  #endif
-
