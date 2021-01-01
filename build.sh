@@ -6,7 +6,7 @@ set -e
 ( cd lzma && ./build.sh )
 
 BUILD_DIR='build'
-VER='3.4.3'
+VER='3.5.1'
 NAME="libarchive-$VER"
 
 mkdir -p "$BUILD_DIR"

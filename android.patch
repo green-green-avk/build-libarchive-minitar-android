@@ -1,6 +1,6 @@
 --- libarchive/archive_write_disk_posix.c
 +++ libarchive/archive_write_disk_posix.c
-@@ -2194,8 +2194,8 @@ restore_entry(struct archive_write_disk *a)
+@@ -2206,8 +2206,8 @@ restore_entry(struct archive_write_disk *a)
  	if (en) {
  		/* Everything failed; give up here. */
  		if ((&a->archive)->error == NULL)
@@ -11,7 +11,7 @@
  		return (ARCHIVE_FAILED);
  	}
  
-@@ -2225,13 +2225,13 @@ create_filesystem_object(struct archive_write_disk *a)
+@@ -2237,13 +2237,13 @@ create_filesystem_object(struct archive_write_disk *a)
  	/* Since link(2) and symlink(2) don't handle modes, we're done here. */
  	linkname = archive_entry_hardlink(a->entry);
  	if (linkname != NULL) {
@@ -27,7 +27,7 @@
  		}
  		/*
  		 * TODO: consider using the cleaned-up path as the link
-@@ -2272,7 +2272,34 @@ create_filesystem_object(struct archive_write_disk *a)
+@@ -2284,7 +2284,34 @@ create_filesystem_object(struct archive_write_disk *a)
  		 */
  		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
  			unlink(a->name);
@@ -62,7 +62,7 @@
  		/*
  		 * New cpio and pax formats allow hardlink entries
  		 * to carry data, so we may have to open the file
-@@ -2317,7 +2344,11 @@ create_filesystem_object(struct archive_write_disk *a)
+@@ -2329,7 +2356,11 @@ create_filesystem_object(struct archive_write_disk *a)
  		 */
  		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
  			unlink(a->name);

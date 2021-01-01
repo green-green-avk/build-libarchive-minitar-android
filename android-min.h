@@ -189,4 +189,6 @@
 
 #define IS_ANDROID_NOROOT
 
+#define __LIBARCHIVE_CONFIG_H_INCLUDED 1
+
 #endif

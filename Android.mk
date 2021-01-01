@@ -67,6 +67,7 @@ libarchive_src_files := libarchive/archive_acl.c \
 						libarchive/archive_read_set_options.c \
 						libarchive/archive_read_support_filter_all.c \
 						libarchive/archive_read_support_filter_bzip2.c \
+						libarchive/archive_read_support_filter_by_code.c \
 						libarchive/archive_read_support_filter_compress.c \
 						libarchive/archive_read_support_filter_gzip.c \
 						libarchive/archive_read_support_filter_grzip.c \
