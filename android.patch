@@ -1,3 +1,36 @@
+--- libarchive/archive_string.c
++++ libarchive/archive_string.c
+@@ -59,6 +59,8 @@ __FBSDID("$FreeBSD: head/lib/libarchive/archive_string.c 201095 2009-12-28 02:33
+ #endif
+ #if defined(_WIN32) && !defined(__CYGWIN__)
+ #include <windows.h>
++#endif
++#if defined(_WIN32) && !defined(__CYGWIN__) || defined(HAVE_LOCALE_H)
+ #include <locale.h>
+ #endif
+ 
+@@ -429,9 +431,21 @@ default_iconv_charset(const char *charset) {
+ 	return locale_charset();
+ #elif HAVE_NL_LANGINFO
+ 	return nl_langinfo(CODESET);
++#else
++	// No iconv, etc... :(
++#if defined(HAVE_SETLOCALE)
++	// It is required just to understand what can we actually convert...
++	const char *const locale = setlocale(LC_CTYPE, NULL);
++	const char *const dot = strchr(locale, '.');
++	if (dot != NULL)
++		return dot + 1;
++#endif
++#if defined(__ANDROID__)
++	return "UTF-8"; // It looks a bit more sane here...
+ #else
+ 	return "";
+ #endif
++#endif
+ }
+ 
+ #if defined(_WIN32) && !defined(__CYGWIN__)
 --- libarchive/archive_write_disk_posix.c
 +++ libarchive/archive_write_disk_posix.c
 @@ -2206,8 +2206,8 @@ restore_entry(struct archive_write_disk *a)
@@ -27,12 +60,17 @@
  		}
  		/*
  		 * TODO: consider using the cleaned-up path as the link
-@@ -2284,7 +2284,34 @@ create_filesystem_object(struct archive_write_disk *a)
+@@ -2284,12 +2284,39 @@ create_filesystem_object(struct archive_write_disk *a)
  		 */
  		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
  			unlink(a->name);
 +#ifndef IS_ANDROID_NOROOT
+ #ifdef HAVE_LINKAT
+ 		r = linkat(AT_FDCWD, linkname, AT_FDCWD, a->name,
+ 		    0) ? errno : 0;
+ #else
  		r = link(linkname, a->name) ? errno : 0;
+ #endif
 +		if (r != 0)
 +			archive_set_error(&a->archive, ARCHIVE_FAILED, "Can't create hard link '%s', errno = %d",
 +				a->name, r);
@@ -62,7 +100,7 @@
  		/*
  		 * New cpio and pax formats allow hardlink entries
  		 * to carry data, so we may have to open the file
-@@ -2329,7 +2356,11 @@ create_filesystem_object(struct archive_write_disk *a)
+@@ -2334,7 +2361,11 @@ create_filesystem_object(struct archive_write_disk *a)
  		 */
  		if (a->flags & ARCHIVE_EXTRACT_SAFE_WRITES)
  			unlink(a->name);

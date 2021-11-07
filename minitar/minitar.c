@@ -52,6 +52,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <locale.h>
 
 /*
  * NO_CREATE implies NO_XZ_CREATE and implies NO_BZIP2_CREATE and NO_GZIP_CREATE and NO_COMPRESS_CREATE.
@@ -153,6 +154,8 @@ static int verbose = 0;
 int
 main(int argc, const char **argv)
 {
+	setlocale(LC_ALL, "");
+
 	const char *filename = NULL;
 	int compress, flags, mode, opt;
 

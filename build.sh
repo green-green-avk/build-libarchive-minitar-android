@@ -5,7 +5,7 @@ set -e
 [ "$1" = '-u' ] && UPDATE=1
 
 BUILD_DIR='build'
-VER='3.5.1'
+VER='3.5.2'
 NAME="libarchive-$VER"
 
 export PATH="$HOME/Android/Sdk/ndk/21.3.6528147:$PATH"

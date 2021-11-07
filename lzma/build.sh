@@ -3,7 +3,7 @@
 set -e
 
 BUILD_DIR='build'
-VER='5.2.4'
+VER='5.2.5'
 NAME="xz-$VER"
 
 mkdir -p "$BUILD_DIR"
