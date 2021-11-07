@@ -117,7 +117,13 @@
 #define HAVE_PWD_H 1
 #define HAVE_READDIR_R 1
 #define HAVE_READLINK 1
-#define HAVE_READLINKAT 1
+
+#if defined(__arm__) || defined(__i386__)
+  #undef HAVE_READLINKAT
+#else
+  #define HAVE_READLINKAT 1
+#endif
+
 #define HAVE_REGEX_H 1
 #define HAVE_SELECT 1
 #define HAVE_SETENV 1
