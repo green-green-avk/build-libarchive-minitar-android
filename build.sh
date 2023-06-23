@@ -8,7 +8,7 @@ BUILD_DIR='build'
 VER='3.5.2'
 NAME="libarchive-$VER"
 
-export PATH="$HOME/Android/Sdk/ndk/21.3.6528147:$PATH"
+export PATH="$HOME/Android/Sdk/ndk/23.2.8568313:$PATH"
 
 if [ -z "$UPDATE" ] ; then
 
